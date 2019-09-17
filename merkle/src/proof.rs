@@ -54,4 +54,14 @@ impl<T: Eq + Clone + AsRef<[u8]>> Proof<T> {
 
         h == self.root()
     }
+
+    /// Get lemma
+    pub fn lemma(&self) -> Vec<T> {
+        self.lemma.clone()
+    }
+
+    /// Get path
+    pub fn path(&self) -> Vec<bool> {
+        self.path.clone()
+    }
 }
