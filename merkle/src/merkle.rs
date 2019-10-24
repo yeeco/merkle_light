@@ -1,5 +1,5 @@
-use hash::{Hashable, Algorithm};
-use proof::Proof;
+use crate::hash::{Hashable, Algorithm};
+use crate::proof::Proof;
 use std::iter::FromIterator;
 use std::marker::PhantomData;
 use std::ops;
