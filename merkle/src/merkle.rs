@@ -3,6 +3,7 @@ use crate::proof::Proof;
 use std::iter::FromIterator;
 use std::marker::PhantomData;
 use std::ops;
+use parity_codec::{Encode, Decode};
 
 /// Merkle Tree.
 ///
@@ -35,7 +36,7 @@ use std::ops;
 /// will be nil.
 ///
 /// TODO: Ord
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Default, Encode, Decode, Eq, PartialEq)]
 pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> {
     data: Vec<T>,
     leafs: usize,
