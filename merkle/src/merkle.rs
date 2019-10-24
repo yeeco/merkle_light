@@ -159,6 +159,16 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> MerkleTree<T, A> {
     pub fn as_slice(&self) -> &[T] {
         self
     }
+    
+    /// Turns a merkle-tree into the raw bytes.
+    pub fn into_bytes(&self) -> Vec<u8>{
+        self.encode()
+    }
+
+    /// Tries to parse `bytes` into merkle-tree.
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ()> {
+        Decode::decode(&mut &bytes[..]).ok_or(())
+    }
 }
 
 impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> {
