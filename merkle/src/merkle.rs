@@ -37,17 +37,14 @@ use parity_codec::{Encode, Decode};
 ///
 /// TODO: Ord
 #[derive(Debug, Clone, Default, Encode, Decode, Eq, PartialEq)]
-pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> where
-T: Encode+Decode
-{
+pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
     data: Vec<T>,
     leafs: usize,
     height: usize,
     _a: PhantomData<A>,
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> MerkleTree<T, A>
-where T: Encode+Decode {
+impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree<T, A> {
     /// Creates new merkle from a sequence of hashes.
     pub fn new<I: IntoIterator<Item = T>>(data: I) -> MerkleTree<T, A> {
         Self::from_iter(data)
