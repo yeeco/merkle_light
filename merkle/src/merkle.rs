@@ -37,14 +37,17 @@ use parity_codec::{Encode, Decode};
 ///
 /// TODO: Ord
 #[derive(Debug, Clone, Default, Encode, Decode, Eq, PartialEq)]
-pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> {
+pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> where
+T: Encode+Decode
+{
     data: Vec<T>,
     leafs: usize,
     height: usize,
     _a: PhantomData<A>,
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> MerkleTree<T, A> {
+impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> MerkleTree<T, A>
+where T: Encode+Decode {
     /// Creates new merkle from a sequence of hashes.
     pub fn new<I: IntoIterator<Item = T>>(data: I) -> MerkleTree<T, A> {
         Self::from_iter(data)
@@ -172,7 +175,7 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> MerkleTree<T, A> {
     }
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> {
+impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> where T: Encode+Decode {
     /// Creates new merkle tree from an iterator over hashable objects.
     fn from_iter<I: IntoIterator<Item = T>>(into: I) -> Self {
         let iter = into.into_iter();
@@ -210,7 +213,7 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTr
     }
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T, A> {
+impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T, A> where T: Encode+Decode {
     type Target = [T];
 
     fn deref(&self) -> &[T] {

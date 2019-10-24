@@ -1,11 +1,11 @@
 #![cfg(test)]
-
-use hash::{Hashable, Algorithm};
-use merkle::MerkleTree;
+use std::fmt;
+use crate::hash::{Hashable, Algorithm};
+use crate::merkle::MerkleTree;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::Hasher;
 use std::iter::FromIterator;
-use test_item::Item;
+use crate::test_item::Item;
 
 /// Custom merkle hash util test
 #[derive(Debug, Clone, Default)]
@@ -63,6 +63,13 @@ fn test_custom_merkle_hasher() {
         x.hash(&mut a);
         a.hash()
     }));
+
+    let bytes = mt.into_bytes();
+    let bytes = bytes.as_slice();
+    let tree = MerkleTree::<Item, CMH>::from_bytes(bytes).unwrap();
+
+    assert_eq!(mt.leafs(), tree.leafs());
+    assert_eq!(mt.height(), tree.height());
 
     assert_eq!(
         mt.as_slice()
