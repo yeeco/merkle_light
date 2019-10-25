@@ -1,4 +1,5 @@
 use crate::hash::Algorithm;
+use parity_codec::{Encode, Decode};
 
 /// Merkle tree inclusion proof for data element, for which item = Leaf(Hash(Data Item)).
 ///
@@ -9,8 +10,8 @@ use crate::hash::Algorithm;
 /// ```
 ///
 /// Proof validation is positioned hash against lemma path to match root hash.
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Proof<T: Eq + Clone + AsRef<[u8]>> {
+#[derive(Debug, Clone, Eq, PartialEq, Encode, Decode)]
+pub struct Proof<T: Eq + Clone + AsRef<[u8]> + Encode + Decode> {
     lemma: Vec<T>,
     path: Vec<bool>,
 }
@@ -63,5 +64,15 @@ impl<T: Eq + Clone + AsRef<[u8]>> Proof<T> {
     /// Get path
     pub fn path(&self) -> Vec<bool> {
         self.path.clone()
+    }
+
+    /// Turns a proof into the raw bytes.
+    pub fn into_bytes(&self) -> Vec<u8>{
+        self.encode()
+    }
+
+    /// Tries to parse `bytes` into proof.
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ()> {
+        Decode::decode(&mut &bytes[..]).ok_or(())
     }
 }
