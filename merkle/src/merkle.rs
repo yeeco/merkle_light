@@ -170,6 +170,16 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     pub fn from_bytes(bytes: &[u8]) -> Result<Self, ()> {
         Decode::decode(&mut &bytes[..]).ok_or(())
     }
+
+    /// Contains special leaf or not.
+    pub fn contains(&self, hash: T) -> bool {
+        for i in 0..self.leafs {
+            if self.data[i] == hash {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> where T: Encode+Decode {
