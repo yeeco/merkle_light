@@ -125,14 +125,14 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
         }
 
         // root is final
-        lemma.push(self.root());
+        lemma.push(self.root().unwrap());
         Proof::new(lemma, path)
     }
 
     /// Returns merkle root
     pub fn root(&self) -> Option<T> {
         if self.data.len() > 1 {
-            self.data[self.data.len() - 1].clone()
+            Some(self.data[self.data.len() - 1].clone())
         } else {
             None
         }
