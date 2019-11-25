@@ -46,12 +46,12 @@ pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorit
 
 impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree<T, A> {
     /// Creates new merkle from a sequence of hashes.
-    pub fn new<I: IntoIterator<Item = T>>(data: I) -> MerkleTree<T, A> {
+    pub fn new<I: IntoIterator<Item=T>>(data: I) -> MerkleTree<T, A> {
         Self::from_iter(data)
     }
 
     /// Creates new merkle tree from a list of hashable objects.
-    pub fn from_data<O: Hashable<A>, I: IntoIterator<Item = O>>(data: I) -> MerkleTree<T, A> {
+    pub fn from_data<O: Hashable<A>, I: IntoIterator<Item=O>>(data: I) -> MerkleTree<T, A> {
         let mut a = A::default();
         Self::from_iter(data.into_iter().map(|x| {
             a.reset();
@@ -130,8 +130,12 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     }
 
     /// Returns merkle root
-    pub fn root(&self) -> T {
-        self.data[self.data.len() - 1].clone()
+    pub fn root(&self) -> Option<T> {
+        if self.data.len() > 1 {
+            self.data[self.data.len() - 1].clone()
+        } else {
+            None
+        }
     }
 
     /// Returns number of elements in the tree.
@@ -160,9 +164,9 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     pub fn as_slice(&self) -> &[T] {
         self
     }
-    
+
     /// Turns a merkle-tree into the raw bytes.
-    pub fn into_bytes(&self) -> Vec<u8>{
+    pub fn into_bytes(&self) -> Vec<u8> {
         self.encode()
     }
 
@@ -182,9 +186,9 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     }
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> where T: Encode+Decode {
+impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTree<T, A> where T: Encode + Decode {
     /// Creates new merkle tree from an iterator over hashable objects.
-    fn from_iter<I: IntoIterator<Item = T>>(into: I) -> Self {
+    fn from_iter<I: IntoIterator<Item=T>>(into: I) -> Self {
         let iter = into.into_iter();
         let mut data: Vec<T> = match iter.size_hint().1 {
             Some(e) => {
@@ -220,7 +224,7 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTr
     }
 }
 
-impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T, A> where T: Encode+Decode {
+impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T, A> where T: Encode + Decode {
     type Target = [T];
 
     fn deref(&self) -> &[T] {
