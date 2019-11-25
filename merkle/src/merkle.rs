@@ -133,6 +133,8 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     pub fn root(&self) -> Option<T> {
         if self.data.len() > 1 {
             Some(self.data[self.data.len() - 1].clone())
+        } else if self.data.len() == 1 {
+            Some(self.data[0].clone())
         } else {
             None
         }
