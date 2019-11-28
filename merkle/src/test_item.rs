@@ -3,9 +3,10 @@
 
 use std::slice;
 use std::mem;
-use hash::{Hashable, Algorithm};
+use crate::hash::{Hashable, Algorithm};
+use parity_codec::{Encode, Decode};
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Default, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Default, Debug, Encode, Decode)]
 pub struct Item(pub u64);
 
 impl AsRef<[u8]> for Item {
