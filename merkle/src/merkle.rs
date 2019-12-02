@@ -36,7 +36,7 @@ use parity_codec::{Encode, Decode};
 /// will be nil.
 ///
 /// TODO: Ord
-#[derive(Debug, Clone, Default, Encode, Decode, Eq, PartialEq)]
+#[derive(Debug, Clone, Encode, Decode, Eq, PartialEq)]
 pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
     data: Vec<T>,
     leafs: usize,
@@ -131,10 +131,8 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
 
     /// Returns merkle root
     pub fn root(&self) -> Option<T> {
-        if self.data.len() > 1 {
+        if self.data.len() > 0 {
             Some(self.data[self.data.len() - 1].clone())
-        } else if self.data.len() == 1 {
-            Some(self.data[0].clone())
         } else {
             None
         }
