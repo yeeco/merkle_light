@@ -125,13 +125,13 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
         }
 
         // root is final
-        lemma.push(self.root().unwrap());
+        lemma.push(self.root());
         Proof::new(lemma, path)
     }
 
     /// Returns merkle root
     pub fn root(&self) -> T {
-        Some(self.data[self.data.len() - 1].clone())
+        self.data[self.data.len() - 1].clone()
     }
 
     /// Returns number of elements in the tree.
