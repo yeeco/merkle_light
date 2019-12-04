@@ -130,7 +130,7 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     }
 
     /// Returns merkle root
-    pub fn root(&self) -> Option<T> {
+    pub fn root(&self) -> T {
         Some(self.data[self.data.len() - 1].clone())
     }
 
