@@ -131,11 +131,7 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
 
     /// Returns merkle root
     pub fn root(&self) -> Option<T> {
-        if self.data.len() > 0 {
-            Some(self.data[self.data.len() - 1].clone())
-        } else {
-            None
-        }
+        Some(self.data[self.data.len() - 1].clone())
     }
 
     /// Returns number of elements in the tree.
@@ -210,7 +206,7 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTr
         let pow = next_pow2(leafs);
         let size = 2 * pow - 1;
 
-        // assert!(leafs > 1);
+        assert!(leafs > 0);
 
         let mut mt: MerkleTree<T, A> = MerkleTree {
             data,
