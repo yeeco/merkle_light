@@ -36,7 +36,7 @@ use parity_codec::{Encode, Decode};
 /// will be nil.
 ///
 /// TODO: Ord
-#[derive(Debug, Clone, Default, Encode, Decode, Eq, PartialEq)]
+#[derive(Debug, Clone, Encode, Decode, Eq, PartialEq)]
 pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
     data: Vec<T>,
     leafs: usize,
@@ -125,19 +125,13 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
         }
 
         // root is final
-        lemma.push(self.root().unwrap());
+        lemma.push(self.root());
         Proof::new(lemma, path)
     }
 
     /// Returns merkle root
-    pub fn root(&self) -> Option<T> {
-        if self.data.len() > 1 {
-            Some(self.data[self.data.len() - 1].clone())
-        } else if self.data.len() == 1 {
-            Some(self.data[0].clone())
-        } else {
-            None
-        }
+    pub fn root(&self) -> T {
+        self.data[self.data.len() - 1].clone()
     }
 
     /// Returns number of elements in the tree.
@@ -212,7 +206,7 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTr
         let pow = next_pow2(leafs);
         let size = 2 * pow - 1;
 
-        // assert!(leafs > 1);
+        assert!(leafs > 0);
 
         let mut mt: MerkleTree<T, A> = MerkleTree {
             data,
