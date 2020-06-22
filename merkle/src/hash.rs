@@ -1,6 +1,6 @@
 //! Hash infrastructure for items in Merkle Tree.
 
-use std::hash::Hasher;
+use crate::mstd::hash::Hasher;
 
 /// A hashable type.
 ///

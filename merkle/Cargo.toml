@@ -16,7 +16,7 @@ keywords      = ["merkle", "merkle-tree"]
 categories    = ["data-structures", "cryptography"]
 
 [dependencies]
-parity-codec = { version = "3.2", features = ["derive"] }
+parity-codec = { version = "3.2", features = ["derive"], default-features = false }
 ring = { version = "^0.16.9", optional = true }
 rust-crypto = { version = "^0.2.36", optional = true }
 rand = { version = "^0.3", optional = true }
@@ -25,7 +25,10 @@ rand = { version = "^0.3", optional = true }
 hex = "0.3"
 
 [features]
-default = []
+default = ["std"]
+std = [
+    "parity-codec/std",
+]
 bitcoin = ["ring", "rust-crypto"]
 chaincore = ["rust-crypto"]
 crypto_bench = ["rust-crypto", "ring", "rand"]

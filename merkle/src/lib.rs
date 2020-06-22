@@ -167,6 +167,8 @@ pub mod proof;
 /// Merkle tree abstractions, implementation and algorithms.
 pub mod merkle;
 
+mod mstd;
+
 /// Tests data.
 #[cfg(test)]
 mod test_item;
