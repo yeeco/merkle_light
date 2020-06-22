@@ -13,7 +13,13 @@
 // limitations under the License.
 
 #[cfg(feature = "std")]
-pub use std::{hash, mem, slice, iter, marker, ops};
+pub use {
+	std::{hash, mem, slice, iter, marker, ops},
+	std::vec::Vec,
+};
 
 #[cfg(not(feature = "std"))]
-pub use core::{hash, mem, slice, iter, marker, ops};
+pub use {
+	core::{hash, mem, slice, iter, marker, ops},
+	alloc::Vec,
+};
