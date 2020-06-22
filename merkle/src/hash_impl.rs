@@ -2,6 +2,7 @@ use crate::hash::Hashable;
 use crate::mstd::hash::Hasher;
 use crate::mstd::mem;
 use crate::mstd::slice;
+use crate::mstd::vec::Vec;
 
 macro_rules! impl_write {
     ($(($ty:ident, $meth:ident),)*) => {$(
@@ -87,12 +88,12 @@ impl<H: Hasher> Hashable<H> for str {
     }
 }
 
-impl<H: Hasher> Hashable<H> for String {
-    fn hash(&self, state: &mut H) {
-        state.write(self.as_bytes());
-        // empty str nope: state.write_u8(0xff)
-    }
-}
+// impl<H: Hasher> Hashable<H> for String {
+//     fn hash(&self, state: &mut H) {
+//         state.write(self.as_bytes());
+//         // empty str nope: state.write_u8(0xff)
+//     }
+// }
 
 macro_rules! impl_hash_tuple {
     () => (

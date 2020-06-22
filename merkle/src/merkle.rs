@@ -3,6 +3,7 @@ use crate::proof::Proof;
 use crate::mstd::iter::FromIterator;
 use crate::mstd::marker::PhantomData;
 use crate::mstd::ops;
+use crate::mstd::vec::Vec;
 use parity_codec::{Encode, Decode};
 
 /// Merkle Tree.

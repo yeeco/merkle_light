@@ -29,6 +29,7 @@ default = ["std"]
 std = [
     "parity-codec/std",
 ]
+nightly = []
 bitcoin = ["ring", "rust-crypto"]
 chaincore = ["rust-crypto"]
 crypto_bench = ["rust-crypto", "ring", "rand"]

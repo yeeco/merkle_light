@@ -1,5 +1,6 @@
 use crate::hash::Algorithm;
 use parity_codec::{Encode, Decode};
+use crate::mstd::vec::Vec;
 
 /// Merkle tree inclusion proof for data element, for which item = Leaf(Hash(Data Item)).
 ///
