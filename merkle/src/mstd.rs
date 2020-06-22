@@ -15,11 +15,11 @@
 #[cfg(feature = "std")]
 pub use {
 	std::{hash, mem, slice, iter, marker, ops},
-	std::vec::Vec,
+	std::vec,
 };
 
 #[cfg(not(feature = "std"))]
 pub use {
 	core::{hash, mem, slice, iter, marker, ops},
-	alloc::Vec,
+	alloc::vec,
 };
