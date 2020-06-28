@@ -1,4 +1,5 @@
 #![cfg(test)]
+#![cfg(feature = "std")]
 
 use crate::hash::*;
 use crate::merkle::MerkleTree;

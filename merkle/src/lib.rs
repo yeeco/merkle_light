@@ -155,6 +155,8 @@
 
 #![cfg_attr(feature="nightly", allow(unstable_features))]
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
 /// Hash infrastructure for items in Merkle tree.
 pub mod hash;
 
@@ -166,6 +168,8 @@ pub mod proof;
 
 /// Merkle tree abstractions, implementation and algorithms.
 pub mod merkle;
+
+mod mstd;
 
 /// Tests data.
 #[cfg(test)]

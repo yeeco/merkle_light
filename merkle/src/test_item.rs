@@ -1,5 +1,6 @@
 #![cfg(test)]
 #![allow(unsafe_code)]
+#![cfg(feature = "std")]
 
 use std::slice;
 use std::mem;

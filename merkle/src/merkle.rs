@@ -1,8 +1,9 @@
 use crate::hash::{Hashable, Algorithm};
 use crate::proof::Proof;
-use std::iter::FromIterator;
-use std::marker::PhantomData;
-use std::ops;
+use crate::mstd::iter::FromIterator;
+use crate::mstd::marker::PhantomData;
+use crate::mstd::ops;
+use crate::mstd::vec::Vec;
 use parity_codec::{Encode, Decode};
 
 /// Merkle Tree.

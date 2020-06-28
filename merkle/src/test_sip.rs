@@ -1,4 +1,5 @@
 #![cfg(test)]
+#![cfg(feature = "std")]
 
 use crate::hash::{Hashable, Algorithm};
 use crate::merkle::MerkleTree;
