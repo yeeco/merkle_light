@@ -229,6 +229,28 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T,
     }
 }
 
+/// Merkle Tree u32
+#[derive(Debug, Clone, Encode, Decode, Eq, PartialEq)]
+pub struct MerkleTree32<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
+    data: Vec<T>,
+    leafs: u32,
+    height: u32,
+    _a: PhantomData<A>,
+}
+
+impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree32<T, A> {
+    /// Convert to MerkleTree struct
+    pub fn to_MerkleTree(self) -> MerkleTree<T, A> {
+        MerkleTree{
+            data: self.data,
+            leafs: self.leafs as u64,
+            height: self.height as u64,
+            _a: self._a,
+        }
+    }
+}
+
+
 /// `next_pow2` returns next highest power of two from a given number if
 /// it is not already a power of two.
 ///
