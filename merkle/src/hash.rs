@@ -1,6 +1,7 @@
 //! Hash infrastructure for items in Merkle Tree.
 
 use crate::mstd::hash::Hasher;
+use std::marker::PhantomData;
 
 /// A hashable type.
 ///
@@ -140,5 +141,35 @@ where
         self.write(left.as_ref());
         self.write(right.as_ref());
         self.hash()
+    }
+}
+
+/// Default Algorithm
+#[derive(Default, Debug, Clone)]
+pub struct DefaultAlgorithm<T> {
+    _a: PhantomData<T>
+}
+
+impl<T> Algorithm<T> for DefaultAlgorithm<T>
+    where
+        T: Default + Clone + AsRef<[u8]>,
+{
+    /// default hash
+    fn hash(&mut self) -> T {
+        unimplemented!()
+    }
+}
+
+impl<T> Hasher for DefaultAlgorithm<T> {
+    /// default write
+    #[inline]
+    fn write(&mut self, _msg: &[u8]) {
+        unimplemented!()
+    }
+
+    /// default finish
+    #[inline]
+    fn finish(&self) -> u64 {
+        unimplemented!()
     }
 }
