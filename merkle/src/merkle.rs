@@ -239,6 +239,11 @@ pub struct MerkleTree32<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algor
 }
 
 impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree32<T, A> {
+    /// Tries to parse `bytes` into merkle-tree.
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ()> {
+        Decode::decode(&mut &bytes[..]).ok_or(())
+    }
+
     /// Convert to MerkleTree struct
     pub fn to_MerkleTree(self) -> MerkleTree<T, A> {
         MerkleTree{
