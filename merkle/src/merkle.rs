@@ -40,8 +40,8 @@ use parity_codec::{Encode, Decode};
 #[derive(Debug, Clone, Encode, Decode, Eq, PartialEq)]
 pub struct MerkleTree<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
     data: Vec<T>,
-    leafs: usize,
-    height: usize,
+    leafs: u64,
+    height: u64,
     _a: PhantomData<A>,
 }
 
@@ -63,7 +63,7 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
 
     fn build(&mut self) {
         let mut a = A::default();
-        let mut width = self.leafs;
+        let mut width = self.leafs as usize;
 
         // build tree
         let mut i: usize = 0;
@@ -92,16 +92,16 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
 
     /// Generate merkle tree inclusion proof for leaf `i`
     pub fn gen_proof(&self, i: usize) -> Proof<T> {
-        assert!(i < self.leafs); // i in [0 .. self.leafs)
+        assert!(i < self.leafs as usize); // i in [0 .. self.leafs)
 
-        let mut lemma: Vec<T> = Vec::with_capacity(self.height + 1); // path + root
-        let mut path: Vec<bool> = Vec::with_capacity(self.height - 1); // path - 1
+        let mut lemma: Vec<T> = Vec::with_capacity(self.height as usize + 1); // path + root
+        let mut path: Vec<bool> = Vec::with_capacity(self.height as usize - 1); // path - 1
 
         let mut base = 0;
         let mut j = i;
 
         // level 1 width
-        let mut width = self.leafs;
+        let mut width = self.leafs as usize;
         if width & 1 == 1 {
             width += 1;
         }
@@ -147,12 +147,12 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
 
     /// Returns height of the tree
     pub fn height(&self) -> usize {
-        self.height
+        self.height as usize
     }
 
     /// Returns original number of elements the tree was built upon.
     pub fn leafs(&self) -> usize {
-        self.leafs
+        self.leafs as usize
     }
 
     /// Extracts a slice containing the entire vector.
@@ -175,7 +175,7 @@ impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree
     /// Contains special leaf or not.
     pub fn contains(&self, hash: T) -> bool {
         for i in 0..self.leafs {
-            if self.data[i] == hash {
+            if self.data[i as usize] == hash {
                 return true;
             }
         }
@@ -211,8 +211,8 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> FromIterator<T> for MerkleTr
 
         let mut mt: MerkleTree<T, A> = MerkleTree {
             data,
-            leafs,
-            height: log2_pow2(size + 1),
+            leafs: leafs as u64,
+            height: log2_pow2(size + 1) as u64,
             _a: PhantomData,
         };
 
@@ -228,6 +228,33 @@ impl<T: Ord + Clone + AsRef<[u8]>, A: Algorithm<T>> ops::Deref for MerkleTree<T,
         self.data.deref()
     }
 }
+
+/// Merkle Tree u32
+#[derive(Debug, Clone, Encode, Decode, Eq, PartialEq)]
+pub struct MerkleTree32<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> {
+    data: Vec<T>,
+    leafs: u32,
+    height: u32,
+    _a: PhantomData<A>,
+}
+
+impl<T: Ord + Clone + AsRef<[u8]> + Encode + Decode, A: Algorithm<T>> MerkleTree32<T, A> {
+    /// Tries to parse `bytes` into merkle-tree.
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ()> {
+        Decode::decode(&mut &bytes[..]).ok_or(())
+    }
+
+    /// Convert to MerkleTree struct
+    pub fn to_MerkleTree(self) -> MerkleTree<T, A> {
+        MerkleTree{
+            data: self.data,
+            leafs: self.leafs as u64,
+            height: self.height as u64,
+            _a: self._a,
+        }
+    }
+}
+
 
 /// `next_pow2` returns next highest power of two from a given number if
 /// it is not already a power of two.
